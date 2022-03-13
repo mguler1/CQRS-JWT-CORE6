@@ -1,8 +1,10 @@
 ﻿using API.Core.Application.Features.CQRS.Commands;
 using API.Core.Application.Features.CQRS.Queries;
+using API.Infrastructure.Tools;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Controllers
 {
@@ -29,7 +31,9 @@ namespace API.Controllers
            var userDto= await _mediator.Send(request);
             if (userDto.IsExist)
             {
-                return Created("", 123);
+                var token=JwtTokenGenerator.GenerateToken(userDto);
+                
+                return Created("", token);
             }
             return BadRequest("UserName veya PAssword Hatalı");
         }
