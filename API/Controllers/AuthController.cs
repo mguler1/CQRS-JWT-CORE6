@@ -35,7 +35,7 @@ namespace API.Controllers
                 
                 return Created("", token);
             }
-            return BadRequest("UserName veya PAssword Hatalı");
+            return BadRequest("UserName veya Password Hatalı");
         }
     }
 }

@@ -16,11 +16,11 @@ namespace API.Infrastructure.Tools
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Role, dto.Role));
             claims.Add(new Claim(ClaimTypes.Name, dto.UserName));
-         
-           
-            JwtSecurityToken token = new JwtSecurityToken(issuer:JwtTokenSettings.Issuer,audience:JwtTokenSettings.Audience,claims:claims,notBefore:DateTime.Now,expires:DateTime.Now.AddDays(JwtTokenSettings.Expire),signingCredentials:credentiials);
+
+            var expireDate = DateTime.UtcNow.AddDays(JwtTokenSettings.Expire);
+            JwtSecurityToken token = new JwtSecurityToken(issuer:JwtTokenSettings.Issuer,audience:JwtTokenSettings.Audience,claims:claims,notBefore:DateTime.UtcNow,expires:DateTime.UtcNow.AddDays(JwtTokenSettings.Expire),signingCredentials:credentiials);
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            return new JwtTokenResponse( handler.WriteToken(token)); 
+            return new JwtTokenResponse( handler.WriteToken(token),expireDate); 
         }
     }
 }

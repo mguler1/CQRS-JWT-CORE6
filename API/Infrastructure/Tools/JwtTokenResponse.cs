@@ -1,11 +1,15 @@
-﻿namespace API.Infrastructure.Tools
+﻿using System;
+
+namespace API.Infrastructure.Tools
 {
     public class JwtTokenResponse
     {
         public string Token { get; set; }
-        public JwtTokenResponse(string token)
+        public DateTime ExpireDate { get; set; }
+        public JwtTokenResponse(string token,DateTime expireDate)
         {
             Token = token;
+            ExpireDate = expireDate;
         }
 
         
