@@ -1,0 +1,34 @@
+﻿@using FrontEnd.Models;
+@model List<CategoryListModel>
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    if(Model?.Count>0)
+    {
+        <table class="table">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>Definition</td>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var category in Model)
+        {
+           <tr>
+          <td>@category.Id</td>
+          <td>@category.Definition</td>
+           </tr>
+         }
+    </tbody>
+</table>
+    }
+    else
+    {
+        <div class="text-center">Herhangi bir kayıt bulunamadı</div>
+    }
+}
+
+

@@ -31,13 +31,15 @@ namespace FrontEnd.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonData = await response.Content.ReadAsStringAsync();
-                    var tokenModel=
-                    JsonSerializer.Deserialize<JwtTokenResponseModel>(jsonData,new JsonSerializerOptions {PropertyNamingPolicy=JsonNamingPolicy.CamelCase });
+                    var tokenModel=JsonSerializer.Deserialize<JwtTokenResponseModel>(jsonData,new JsonSerializerOptions {PropertyNamingPolicy=JsonNamingPolicy.CamelCase });
                     if (tokenModel!=null)
                     {
                         JwtSecurityTokenHandler handler = new();
                         var token = handler.ReadJwtToken(tokenModel.Token);
-                        var claimsIdentity = new ClaimsIdentity(token.Claims, JwtBearerDefaults.AuthenticationScheme);
+
+                        var claims=token.Claims.ToList();
+                        claims.Add(new Claim("accessToken", tokenModel.Token!));
+                        var claimsIdentity = new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme);
                         var authProperties = new AuthenticationProperties { ExpiresUtc=tokenModel.ExpireDate,IsPersistent=true};
 
                      await HttpContext.SignInAsync(JwtBearerDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity),authProperties);

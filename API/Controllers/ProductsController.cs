@@ -24,7 +24,7 @@ namespace API.Controllers
             var result = await _mediator.Send(new GetAllProductsQueryRequest());
             return Ok(result);
         }
-        [HttpGet]
+        [HttpGet("id")]
         public async Task<IActionResult> Get(int id)
         {
             var result = await _mediator.Send(new GetProductQueryRequest(id));
