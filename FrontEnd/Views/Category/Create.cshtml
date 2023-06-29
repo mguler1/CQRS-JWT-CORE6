@@ -1,0 +1,18 @@
+﻿@using FrontEnd.Models;
+@model CategoryCreateModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+ <form asp-action="Create"asp-controller="Category"method="post"class="w-75 m-5 p-3 shado  mx-auto">
+  <div class="form-group">
+    <label class="form-labe1">Kullanıcı Adı</label>
+    <input type="text" class="form-control"name="Definition" placeholder="Kategori Adınızı Giriniz">
+  </div>
+  <div class="mt-3">
+       <button type="submit" class="btn btn-primary">Kaydet</button>
+  </div>
+</form>
