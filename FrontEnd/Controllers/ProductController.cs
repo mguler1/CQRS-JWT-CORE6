@@ -33,5 +33,15 @@ namespace FrontEnd.Controllers
             }
             return View();
         }
+        public async Task<IActionResult> Remove(int id)
+        {
+            var token = User.Claims.FirstOrDefault(x => x.Type == "accessToken")!.Value;
+            if (token != null)
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                var response = await client.DeleteAsync($"http://localhost:5125/api/products/{id}");
+            }
+            return RedirectToAction("List");
+        }
     }
 }

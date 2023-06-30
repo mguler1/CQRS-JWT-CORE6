@@ -74,5 +74,48 @@ namespace FrontEnd.Controllers
             }
             return View(model);
         }
+
+      
+        public async Task<IActionResult> Update(int id)
+        {
+            var token = User.Claims.FirstOrDefault(x => x.Type == "accessToken")!.Value;
+            if (token != null)
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                var response = await client.GetAsync($"http://localhost:5125/api/categories/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<CategoryListModel>(jsonData, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+                    return View(result);
+                }
+              
+            }
+            return RedirectToAction("List");
+        }
+        [HttpPost]
+        public async Task<IActionResult>Update(CategoryListModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var token = User.Claims.FirstOrDefault(x => x.Type == "accessToken")!.Value;
+                if (token != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                    var jsonData = JsonSerializer.Serialize(model);
+                    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                    var response = await client.PutAsync("http://localhost:5125/api/categories", content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("List");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Bir hata meydana geldi");
+                    }
+                }
+            }
+            return View(model);
+        }
     }
 }
